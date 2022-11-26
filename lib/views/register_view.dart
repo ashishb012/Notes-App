@@ -67,46 +67,49 @@ class _RegisterViewState extends State<RegisterView> {
               enableSuggestions: false,
               autocorrect: false,
             ),
-            ElevatedButton(
-              onPressed: () async {
-                final email = _email.text;
-                final password = _password.text;
-                try {
-                  if (password != _confirmPassword.text) {
-                    throw "Password doesn't match";
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: ElevatedButton(
+                onPressed: () async {
+                  final email = _email.text;
+                  final password = _password.text;
+                  try {
+                    if (password != _confirmPassword.text) {
+                      throw "Password doesn't match";
+                    }
+                    await AuthService.firebase()
+                        .emailCreateUser(email: email, password: password);
+                    await AuthService.firebase().sendEmailVerification();
+                    Navigator.of(context).pushNamed(verifyEmailRoute);
+                  } on MyNotesWeakPasswordAuthExceptions {
+                    await showErrorDailog(
+                      context,
+                      "weak password",
+                    );
+                  } on MyNotesInvalidEmailAuthExceptions {
+                    await showErrorDailog(
+                      context,
+                      "invalid email",
+                    );
+                  } on MyNotesEmailInUseAuthExceptions {
+                    await showErrorDailog(
+                      context,
+                      "email already in use",
+                    );
+                  } on MyNotesAuthExceptions catch (e) {
+                    await showErrorDailog(
+                      context,
+                      "Error: ${e.toString()} ",
+                    );
+                  } catch (e) {
+                    await showErrorDailog(
+                      context,
+                      "Error: ${e.toString()} ",
+                    );
                   }
-                  await AuthService.firebase()
-                      .emailCreateUser(email: email, password: password);
-                  await AuthService.firebase().sendEmailVerification();
-                  Navigator.of(context).pushNamed(verifyEmailRoute);
-                } on MyNotesWeakPasswordAuthExceptions {
-                  await showErrorDailog(
-                    context,
-                    "weak password",
-                  );
-                } on MyNotesInvalidEmailAuthExceptions {
-                  await showErrorDailog(
-                    context,
-                    "invalid email",
-                  );
-                } on MyNotesEmailInUseAuthExceptions {
-                  await showErrorDailog(
-                    context,
-                    "email already in use",
-                  );
-                } on MyNotesAuthExceptions catch (e) {
-                  await showErrorDailog(
-                    context,
-                    "Error: ${e.toString()} ",
-                  );
-                } catch (e) {
-                  await showErrorDailog(
-                    context,
-                    "Error: ${e.toString()} ",
-                  );
-                }
-              },
-              child: const Text("Register"),
+                },
+                child: const Text("Register"),
+              ),
             ),
             TextButton(
               onPressed: () {

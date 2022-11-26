@@ -55,47 +55,51 @@ class _LoginViewState extends State<LoginView> {
               enableSuggestions: false,
               autocorrect: false,
             ),
-            ElevatedButton(
-                onPressed: () async {
-                  final email = _email.text;
-                  final password = _password.text;
-                  try {
-                    await AuthService.firebase()
-                        .emailLogIn(email: email, password: password);
-                    final user = AuthService.firebase().currentUser;
-                    if (user?.isEmailVerified ?? false) {
-                      Navigator.of(context).pushNamed(notesViewRoute);
-                    } else {
-                      Navigator.of(context).pushNamed(verifyEmailRoute);
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: ElevatedButton(
+                  onPressed: () async {
+                    final email = _email.text;
+                    final password = _password.text;
+                    try {
+                      await AuthService.firebase()
+                          .emailLogIn(email: email, password: password);
+                      final user = AuthService.firebase().currentUser;
+                      if (user?.isEmailVerified ?? false) {
+                        Navigator.of(context)
+                            .pushReplacementNamed(notesViewRoute);
+                      } else {
+                        Navigator.of(context).pushNamed(verifyEmailRoute);
+                      }
+                    } on MyNotesNullUserAuthExceptions {
+                      await showErrorDailog(
+                        context,
+                        "User not found",
+                      );
+                    } on MyNotesWrongPasswordAuthExceptions {
+                      await showErrorDailog(
+                        context,
+                        "Wrong credentials",
+                      );
+                    } on MyNotesInvalidEmailAuthExceptions {
+                      await showErrorDailog(
+                        context,
+                        "invalid email",
+                      );
+                    } on MyNotesAuthExceptions catch (e) {
+                      await showErrorDailog(
+                        context,
+                        "Error: ${e.toString()} ",
+                      );
+                    } catch (e) {
+                      await showErrorDailog(
+                        context,
+                        "Error: ${e.toString()} ",
+                      );
                     }
-                  } on MyNotesNullUserAuthExceptions {
-                    await showErrorDailog(
-                      context,
-                      "User not found",
-                    );
-                  } on MyNotesWrongPasswordAuthExceptions {
-                    await showErrorDailog(
-                      context,
-                      "Wrong credentials",
-                    );
-                  } on MyNotesInvalidEmailAuthExceptions {
-                    await showErrorDailog(
-                      context,
-                      "invalid email",
-                    );
-                  } on MyNotesAuthExceptions catch (e) {
-                    await showErrorDailog(
-                      context,
-                      "Error: ${e.toString()} ",
-                    );
-                  } catch (e) {
-                    await showErrorDailog(
-                      context,
-                      "Error: ${e.toString()} ",
-                    );
-                  }
-                },
-                child: const Text("Login")),
+                  },
+                  child: const Text("Login")),
+            ),
             TextButton(
               onPressed: () {
                 Navigator.of(context)
