@@ -83,7 +83,7 @@ class _NewNotesViewState extends State<NewNotesView> {
         title: const Text("New Note"),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(5.0),
         child: FutureBuilder(
           future: createNewNote(),
           builder: (context, snapshot) {
@@ -95,6 +95,10 @@ class _NewNotesViewState extends State<NewNotesView> {
                   controller: _textEditingController,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
+                  decoration: const InputDecoration(
+                    hintText: "Start Typing here...",
+                    border: InputBorder.none,
+                  ),
                 );
               default:
                 return const CircularProgressIndicator();
