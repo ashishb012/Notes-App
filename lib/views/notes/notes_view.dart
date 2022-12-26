@@ -6,7 +6,6 @@ import 'package:my_notes/enums/menu_actions.dart';
 import 'package:my_notes/services/auth/auth_services.dart';
 import 'package:my_notes/services/crud/notes_services.dart';
 import 'package:my_notes/utilities/dailogs/logout_dailog.dart';
-import 'package:my_notes/views/notes/new_notes_view.dart';
 import 'package:my_notes/views/notes/notes_list_view.dart';
 
 class NotesView extends StatefulWidget {
@@ -22,9 +21,9 @@ class _NotesViewState extends State<NotesView> {
 
   @override
   void initState() {
+    super.initState();
     _notesServices = NotesServices();
     _notesServices.open();
-    super.initState();
   }
 
   //@override
@@ -135,6 +134,11 @@ class _NotesViewState extends State<NotesView> {
                             onDeleteNote: (note) async {
                               await _notesServices.deleteNote(id: note.id);
                             },
+                            onTap: (note) {
+                              Navigator.of(context).pushNamed(
+                                  createUpdateNotesRoute,
+                                  arguments: note);
+                            },
                           );
                         } else {
                           return const CircularProgressIndicator();
@@ -151,7 +155,7 @@ class _NotesViewState extends State<NotesView> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.of(context).pushNamed(newNotesotesRoute);
+            Navigator.of(context).pushNamed(createUpdateNotesRoute);
           },
           child: const Icon(Icons.note_add_outlined),
         ),
@@ -159,24 +163,3 @@ class _NotesViewState extends State<NotesView> {
     );
   }
 }
-
-//Future<bool> logoutDailog(BuildContext context) => showDialog<bool>(
-//      context: context,
-//      builder: ((context) {
-//        return AlertDialog(
-//          title: const Text("Logout"),
-//          content: const Text("Are you sure you want to logout?"),
-//          actions: [
-//            TextButton(
-//                onPressed: () => Navigator.of(context).pop(false),
-//                child: const Text("Cancel")),
-//            TextButton(
-//                onPressed: () => Navigator.of(context).pop(true),
-//                child: const Text("Yes")),
-//          ],
-//        );
-//      }),
-//    ).then(
-//      (value) => value ?? false,
-//    );
-//

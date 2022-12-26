@@ -8,6 +8,7 @@ import 'package:my_notes/services/crud/crud_exceptions.dart';
 
 class NotesServices {
   Database? _db;
+  List<DatabaseNote> _notes = [];
 
   static final NotesServices _shared = NotesServices._sharedInstance();
   NotesServices._sharedInstance() {
@@ -19,7 +20,6 @@ class NotesServices {
   }
   factory NotesServices() => _shared;
 
-  List<DatabaseNote> _notes = [];
   late final StreamController<List<DatabaseNote>> _notesStreamController;
 
   Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream;
