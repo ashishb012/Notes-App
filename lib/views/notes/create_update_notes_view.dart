@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_notes/services/auth/auth_services.dart';
+import 'package:my_notes/utilities/dailogs/cannot_share_empty_note_dailog.dart';
 import 'package:my_notes/utilities/generics/get_arguments.dart';
 import 'package:my_notes/services/firebase_cloud/cloud_note.dart';
 import 'package:my_notes/services/firebase_cloud/firebase_cloud_storage.dart';
-import 'package:my_notes/services/firebase_cloud/cloud_storage_exceptions.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CreateUpdateNotesView extends StatefulWidget {
   const CreateUpdateNotesView({super.key});
@@ -85,7 +86,28 @@ class _CreateUpdateNotesViewState extends State<CreateUpdateNotesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("New Note"),
+        title: const TextField(
+          maxLines: 1,
+          keyboardType: TextInputType.text,
+          decoration: InputDecoration(
+            hintText: "Title",
+            border: InputBorder.none,
+          ),
+        ),
+        //const Text("New Note"),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final text = _textEditingController.text;
+              if (_note == null || text.isEmpty) {
+                await showCannotShareEmptyNoteDailog(context);
+              } else {
+                Share.share(text);
+              }
+            },
+            icon: const Icon(Icons.share),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(5.0),
@@ -114,8 +136,6 @@ class _CreateUpdateNotesViewState extends State<CreateUpdateNotesView> {
     );
   }
 }
-
-
 
 // // Crud
 // class _CreateUpdateNotesViewState extends State<CreateUpdateNotesView> {

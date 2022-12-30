@@ -1,6 +1,5 @@
 // use overlay later
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 typedef DailogOptionBuilder<T> = Map<String, T?> Function();
