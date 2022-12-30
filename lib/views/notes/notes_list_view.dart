@@ -23,12 +23,18 @@ class NotesListView extends StatelessWidget {
       itemBuilder: (context, index) {
         final note = notes.elementAt(index);
         return ListTile(
+          onLongPress: () {
+            // BottomAppBar();
+          },
           onTap: () {
             onTap(note);
           },
           title: Text(
-            note.text,
-            maxLines: 1,
+            note.title,
+            style: DefaultTextStyle.of(context).style.apply(
+                  fontSizeFactor: 1.2,
+                  fontWeightDelta: 10,
+                ),
             softWrap: true,
             overflow: TextOverflow.ellipsis,
           ),
