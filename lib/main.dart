@@ -28,6 +28,8 @@ void main() {
   );
 }
 
+// Bloc
+// Counter app
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -172,7 +174,6 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     );
   }
 }
-
 
 // class HomePage extends StatefulWidget {
 //   const HomePage({super.key});
