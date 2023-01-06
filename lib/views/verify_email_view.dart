@@ -38,8 +38,9 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
               const Text("\nEntered wrong email"),
               TextButton(
                 onPressed: () async {
+                  final navigator = Navigator.of(context);
                   await AuthService.firebase().logout();
-                  Navigator.of(context).pop();
+                  navigator.pop();
                 },
                 child: const Text("Restart"),
               ),

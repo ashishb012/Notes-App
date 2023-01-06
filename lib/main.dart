@@ -1,14 +1,11 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_notes/constants/routs.dart';
-import 'package:my_notes/services/auth/auth_services.dart';
 import 'package:my_notes/views/login_view.dart';
 import 'package:my_notes/views/notes/create_update_notes_view.dart';
 import 'package:my_notes/views/notes/notes_view.dart';
 import 'package:my_notes/views/register_view.dart';
 import 'package:my_notes/views/verify_email_view.dart';
-import 'package:path/path.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

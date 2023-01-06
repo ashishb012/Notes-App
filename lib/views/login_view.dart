@@ -61,15 +61,15 @@ class _LoginViewState extends State<LoginView> {
                   onPressed: () async {
                     final email = _email.text;
                     final password = _password.text;
+                    final navigator = Navigator.of(context);
                     try {
                       await AuthService.firebase()
                           .emailLogIn(email: email, password: password);
                       final user = AuthService.firebase().currentUser;
                       if (user?.isEmailVerified ?? false) {
-                        Navigator.of(context)
-                            .pushReplacementNamed(notesViewRoute);
+                        navigator.pushReplacementNamed(notesViewRoute);
                       } else {
-                        Navigator.of(context).pushNamed(verifyEmailRoute);
+                        navigator.pushNamed(verifyEmailRoute);
                       }
                     } on MyNotesNullUserAuthExceptions {
                       await showErrorDailog(

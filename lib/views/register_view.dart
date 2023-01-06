@@ -73,6 +73,7 @@ class _RegisterViewState extends State<RegisterView> {
                 onPressed: () async {
                   final email = _email.text;
                   final password = _password.text;
+                  final navigator = Navigator.of(context);
                   try {
                     if (password != _confirmPassword.text) {
                       throw "Password doesn't match";
@@ -80,7 +81,7 @@ class _RegisterViewState extends State<RegisterView> {
                     await AuthService.firebase()
                         .emailCreateUser(email: email, password: password);
                     await AuthService.firebase().sendEmailVerification();
-                    Navigator.of(context).pushNamed(verifyEmailRoute);
+                    navigator.pushNamed(verifyEmailRoute);
                   } on MyNotesWeakPasswordAuthExceptions {
                     await showErrorDailog(
                       context,
