@@ -4,6 +4,7 @@ import 'package:my_notes/constants/routs.dart';
 import 'package:my_notes/services/auth/auth_exceptions.dart';
 import 'package:my_notes/services/auth/bloc/auth_bloc.dart';
 import 'package:my_notes/services/auth/bloc/auth_event.dart';
+import 'package:my_notes/services/auth/bloc/auth_state.dart';
 import 'package:my_notes/utilities/dailogs/error_dailogs.dart';
 
 class LoginView extends StatefulWidget {
@@ -57,45 +58,52 @@ class _LoginViewState extends State<LoginView> {
               enableSuggestions: false,
               autocorrect: false,
             ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: ElevatedButton(
+            BlocListener<Authbloc, AuthState>(
+              listener: (context, state) async {
+                if (state is AuthStateLoggedOut) {
+                  if (state.exception is MyNotesNullUserAuthExceptions) {
+                    await showErrorDailog(
+                      context,
+                      "User not found",
+                    );
+                  } else if (state.exception
+                      is MyNotesWrongPasswordAuthExceptions) {
+                    await showErrorDailog(
+                      context,
+                      "Wrong credentials",
+                    );
+                  } else if (state.exception
+                      is MyNotesInvalidEmailAuthExceptions) {
+                    await showErrorDailog(
+                      context,
+                      "invalid email",
+                    );
+                  } else if (state.exception is MyNotesAuthExceptions) {
+                    await showErrorDailog(
+                      context,
+                      "Authentication error",
+                    );
+                  } else {
+                    await showErrorDailog(
+                      context,
+                      "Error: ${state.exception.toString()}",
+                    );
+                  }
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: ElevatedButton(
                   onPressed: () async {
                     final email = _email.text;
                     final password = _password.text;
-                    final navigator = Navigator.of(context);
-                    try {
-                      context.read<Authbloc>().add(
-                            AuthEventLogIn(email, password),
-                          );
-                    } on MyNotesNullUserAuthExceptions {
-                      await showErrorDailog(
-                        context,
-                        "User not found",
-                      );
-                    } on MyNotesWrongPasswordAuthExceptions {
-                      await showErrorDailog(
-                        context,
-                        "Wrong credentials",
-                      );
-                    } on MyNotesInvalidEmailAuthExceptions {
-                      await showErrorDailog(
-                        context,
-                        "invalid email",
-                      );
-                    } on MyNotesAuthExceptions catch (e) {
-                      await showErrorDailog(
-                        context,
-                        "Error: ${e.toString()} ",
-                      );
-                    } catch (e) {
-                      await showErrorDailog(
-                        context,
-                        "Error: ${e.toString()} ",
-                      );
-                    }
+                    context.read<Authbloc>().add(
+                          AuthEventLogIn(email, password),
+                        );
                   },
-                  child: const Text("Login")),
+                  child: const Text("Login"),
+                ),
+              ),
             ),
             TextButton(
               onPressed: () {
