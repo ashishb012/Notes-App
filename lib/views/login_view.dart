@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_notes/constants/routs.dart';
 import 'package:my_notes/services/auth/auth_exceptions.dart';
-import 'package:my_notes/services/auth/auth_services.dart';
+import 'package:my_notes/services/auth/bloc/auth_bloc.dart';
+import 'package:my_notes/services/auth/bloc/auth_event.dart';
 import 'package:my_notes/utilities/dailogs/error_dailogs.dart';
 
 class LoginView extends StatefulWidget {
@@ -63,14 +65,9 @@ class _LoginViewState extends State<LoginView> {
                     final password = _password.text;
                     final navigator = Navigator.of(context);
                     try {
-                      await AuthService.firebase()
-                          .emailLogIn(email: email, password: password);
-                      final user = AuthService.firebase().currentUser;
-                      if (user?.isEmailVerified ?? false) {
-                        navigator.pushReplacementNamed(notesViewRoute);
-                      } else {
-                        navigator.pushNamed(verifyEmailRoute);
-                      }
+                      context.read<Authbloc>().add(
+                            AuthEventLogIn(email, password),
+                          );
                     } on MyNotesNullUserAuthExceptions {
                       await showErrorDailog(
                         context,

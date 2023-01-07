@@ -1,9 +1,12 @@
 import 'dart:developer' show log;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_notes/constants/routs.dart';
 import 'package:my_notes/enums/menu_actions.dart';
 import 'package:my_notes/services/auth/auth_services.dart';
+import 'package:my_notes/services/auth/bloc/auth_bloc.dart';
+import 'package:my_notes/services/auth/bloc/auth_event.dart';
 import 'package:my_notes/services/firebase_cloud/cloud_note.dart';
 import 'package:my_notes/services/firebase_cloud/firebase_cloud_storage.dart';
 import 'package:my_notes/utilities/dailogs/logout_dailog.dart';
@@ -62,16 +65,12 @@ class _NotesViewState extends State<NotesView> {
                 ];
               },
               onSelected: (value) async {
-                final navigator = Navigator.of(context);
+                final logout = context.read<Authbloc>();
                 switch (value) {
                   case MenuAction.logout:
                     final bool isLogout = await showLogoutDailog(context);
                     if (isLogout) {
-                      AuthService.firebase().logout();
-                      navigator.pushNamedAndRemoveUntil(
-                        loginRoute,
-                        (route) => false,
-                      );
+                      logout.add(const AuthEventLogOut());
                     }
                     log(value.toString());
                     log(isLogout.toString());
@@ -138,10 +137,10 @@ class _NotesViewState extends State<NotesView> {
                     },
                   );
                 } else {
-                  return const CircularProgressIndicator();
+                  return const Center(child: CircularProgressIndicator());
                 }
               default:
-                return const CircularProgressIndicator();
+                return const Center(child: CircularProgressIndicator());
             }
           },
         ),
