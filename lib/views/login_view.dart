@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_notes/constants/routs.dart';
 import 'package:my_notes/services/auth/auth_exceptions.dart';
 import 'package:my_notes/services/auth/bloc/auth_bloc.dart';
 import 'package:my_notes/services/auth/bloc/auth_event.dart';
 import 'package:my_notes/services/auth/bloc/auth_state.dart';
 import 'package:my_notes/utilities/dailogs/error_dailogs.dart';
+import 'package:my_notes/utilities/dailogs/loading_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -17,6 +17,7 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
+  //CloseDialog? _closeDialogHandel;
 
   @override
   void initState() {
@@ -34,85 +35,96 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Login"),
-        elevation: 5,
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _email,
-              decoration: const InputDecoration(hintText: "Enter your email"),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            TextField(
-              controller: _password,
-              decoration:
-                  const InputDecoration(hintText: "Enter your password"),
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-            ),
-            BlocListener<Authbloc, AuthState>(
-              listener: (context, state) async {
-                if (state is AuthStateLoggedOut) {
-                  if (state.exception is MyNotesNullUserAuthExceptions) {
-                    await showErrorDailog(
-                      context,
-                      "User not found",
-                    );
-                  } else if (state.exception
-                      is MyNotesWrongPasswordAuthExceptions) {
-                    await showErrorDailog(
-                      context,
-                      "Wrong credentials",
-                    );
-                  } else if (state.exception
-                      is MyNotesInvalidEmailAuthExceptions) {
-                    await showErrorDailog(
-                      context,
-                      "invalid email",
-                    );
-                  } else if (state.exception is MyNotesAuthExceptions) {
-                    await showErrorDailog(
-                      context,
-                      "Authentication error",
-                    );
-                  } else {
-                    await showErrorDailog(
-                      context,
-                      "Error: ${state.exception.toString()}",
-                    );
-                  }
-                }
-              },
-              child: Padding(
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) async {
+        if (state is AuthStateLoggedOut) {
+          // final closeDialog = _closeDialogHandel;
+          // if (!state.isLoading && closeDialog != null) {
+          //   closeDialog();
+
+          //   _closeDialogHandel = null;
+          // } else if (state.isLoading && closeDialog == null) {
+          //   _closeDialogHandel = showLoadingDailog(
+          //     context: context,
+          //     text: "Loading...",
+          //   );
+          // }
+
+          if (state.exception is MyNotesNullUserAuthExceptions) {
+            await showErrorDailog(
+              context,
+              "User not found",
+            );
+          } else if (state.exception is MyNotesWrongPasswordAuthExceptions) {
+            await showErrorDailog(
+              context,
+              "Wrong credentials",
+            );
+          } else if (state.exception is MyNotesInvalidEmailAuthExceptions) {
+            await showErrorDailog(
+              context,
+              "invalid email",
+            );
+          } else if (state.exception is MyNotesAuthExceptions) {
+            await showErrorDailog(
+              context,
+              "Authentication error ",
+            );
+          } else {
+            await showErrorDailog(
+              context,
+              "Error: ${state.exception.toString()}",
+            );
+          }
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Login"),
+          elevation: 5,
+          centerTitle: true,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextField(
+                controller: _email,
+                decoration: const InputDecoration(hintText: "Enter your email"),
+                keyboardType: TextInputType.emailAddress,
+              ),
+              TextField(
+                controller: _password,
+                decoration:
+                    const InputDecoration(hintText: "Enter your password"),
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+              ),
+              Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: ElevatedButton(
                   onPressed: () async {
                     final email = _email.text;
                     final password = _password.text;
-                    context.read<Authbloc>().add(
+                    context.read<AuthBloc>().add(
                           AuthEventLogIn(email, password),
                         );
                   },
                   child: const Text("Login"),
                 ),
               ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil(registerRoute, (route) => false);
-              },
-              child: const Text("Not registered? Register here"),
-            ),
-          ],
+              TextButton(
+                onPressed: () {
+                  context.read<AuthBloc>().add(
+                        const AuthEventShouldRigister(),
+                      );
+                },
+                child: const Text("Not registered? Register here"),
+              ),
+            ],
+          ),
         ),
       ),
     );

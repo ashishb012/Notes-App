@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_notes/services/auth/auth_services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_notes/services/auth/bloc/auth_bloc.dart';
+import 'package:my_notes/services/auth/bloc/auth_event.dart';
 
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({super.key});
@@ -24,23 +26,22 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                "Check your inbox and verify your email by clicking the link",
-              ),
-              const Text("\nDidn't recive the email"),
+                  "Check your inbox and verify your email by clicking the link"),
+              const Text("\nAlso check spam folder"),
+              const Text("\nIf you didn't recive the email"),
               TextButton(
-                onPressed: () async {
-                  //final user = FirebaseAuth.instance.currentUser;
-                  //await user?.sendEmailVerification();
-                  await AuthService.firebase().sendEmailVerification();
+                onPressed: () {
+//add exception for "too-many-requests"
+                  context
+                      .read<AuthBloc>()
+                      .add(const AuthEventSendVerificationEmail());
                 },
                 child: const Text("Resend email verification link"),
               ),
-              const Text("\nEntered wrong email"),
+              const Text("\n\nEntered wrong email"),
               TextButton(
-                onPressed: () async {
-                  final navigator = Navigator.of(context);
-                  await AuthService.firebase().logout();
-                  navigator.pop();
+                onPressed: () {
+                  context.read<AuthBloc>().add(const AuthEventLogOut());
                 },
                 child: const Text("Restart"),
               ),

@@ -18,15 +18,11 @@ void main() {
     MaterialApp(
       title: "My Notes",
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: BlocProvider<Authbloc>(
-        create: (context) => Authbloc(FirebaseAuthProvider()),
+      home: BlocProvider<AuthBloc>(
+        create: (context) => AuthBloc(FirebaseAuthProvider()),
         child: const HomePage(),
       ),
       routes: {
-        registerRoute: (context) => const RegisterView(),
-        loginRoute: (context) => const LoginView(),
-        verifyEmailRoute: (context) => const VerifyEmailView(),
-        notesViewRoute: (context) => const NotesView(),
         createUpdateNotesRoute: (context) => const CreateUpdateNotesView(),
       },
     ),
@@ -43,8 +39,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    context.read<Authbloc>().add(const AuthEventInitialize());
-    return BlocBuilder<Authbloc, AuthState>(
+    context.read<AuthBloc>().add(const AuthEventInitialize());
+    return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is AuthStateLoggedIn) {
           return const NotesView();
@@ -52,6 +48,8 @@ class _HomePageState extends State<HomePage> {
           return const VerifyEmailView();
         } else if (state is AuthStateLoggedOut) {
           return const LoginView();
+        } else if (state is AuthStateRegistering) {
+          return const RegisterView();
         } else {
           return const Scaffold(
             body: Center(

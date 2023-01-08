@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:my_notes/constants/routs.dart';
 import 'package:my_notes/services/auth/auth_exceptions.dart';
-import 'package:my_notes/services/auth/auth_services.dart';
+import 'package:my_notes/services/auth/bloc/auth_bloc.dart';
+import 'package:my_notes/services/auth/bloc/auth_event.dart';
+import 'package:my_notes/services/auth/bloc/auth_state.dart';
 import 'package:my_notes/utilities/dailogs/error_dailogs.dart';
 
 class RegisterView extends StatefulWidget {
@@ -35,91 +37,96 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Register"),
-        elevation: 5,
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _email,
-              decoration: const InputDecoration(hintText: "Enter your email"),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            TextField(
-              controller: _password,
-              decoration:
-                  const InputDecoration(hintText: "Enter your password"),
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-            ),
-            TextField(
-              controller: _confirmPassword,
-              decoration:
-                  const InputDecoration(hintText: "Re-enter your password"),
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: ElevatedButton(
-                onPressed: () async {
-                  final email = _email.text;
-                  final password = _password.text;
-                  final navigator = Navigator.of(context);
-                  try {
-                    if (password != _confirmPassword.text) {
-                      throw "Password doesn't match";
-                    }
-                    await AuthService.firebase()
-                        .emailCreateUser(email: email, password: password);
-                    await AuthService.firebase().sendEmailVerification();
-                    navigator.pushNamed(verifyEmailRoute);
-                  } on MyNotesWeakPasswordAuthExceptions {
-                    await showErrorDailog(
-                      context,
-                      "weak password",
-                    );
-                  } on MyNotesInvalidEmailAuthExceptions {
-                    await showErrorDailog(
-                      context,
-                      "invalid email",
-                    );
-                  } on MyNotesEmailInUseAuthExceptions {
-                    await showErrorDailog(
-                      context,
-                      "email already in use",
-                    );
-                  } on MyNotesAuthExceptions catch (e) {
-                    await showErrorDailog(
-                      context,
-                      "Error: ${e.toString()} ",
-                    );
-                  } catch (e) {
-                    await showErrorDailog(
-                      context,
-                      "Error: ${e.toString()} ",
-                    );
-                  }
-                },
-                child: const Text("Register"),
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) async {
+        if (state is AuthStateRegistering) {
+          if (state.exception is MyNotesWeakPasswordAuthExceptions) {
+            await showErrorDailog(
+              context,
+              "weak password",
+            );
+          } else if (state.exception is MyNotesInvalidEmailAuthExceptions) {
+            await showErrorDailog(
+              context,
+              "invalid email",
+            );
+          } else if (state.exception is MyNotesEmailInUseAuthExceptions) {
+            await showErrorDailog(
+              context,
+              "email already in use",
+            );
+          } else if (state.exception is MyNotesAuthExceptions) {
+            await showErrorDailog(
+              context,
+              "Authentication error ",
+            );
+          } else {
+            await showErrorDailog(
+              context,
+              "Error: ${state.exception.toString()}",
+            );
+          }
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Register"),
+          elevation: 5,
+          centerTitle: true,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextField(
+                controller: _email,
+                decoration: const InputDecoration(hintText: "Enter your email"),
+                keyboardType: TextInputType.emailAddress,
               ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil(loginRoute, (route) => false);
-              },
-              child: const Text("Already registered? Login here"),
-            ),
-          ],
+              TextField(
+                controller: _password,
+                decoration:
+                    const InputDecoration(hintText: "Enter your password"),
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+              ),
+              TextField(
+                controller: _confirmPassword,
+                decoration:
+                    const InputDecoration(hintText: "Re-enter your password"),
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final email = _email.text;
+                    final password = _password.text;
+                    if (password != _confirmPassword.text) {
+                      await showErrorDailog(
+                        context,
+                        "Password doesn't match",
+                      );
+                    }
+                    context.read<AuthBloc>().add(
+                          AuthEventRegister(email, password),
+                        );
+                  },
+                  child: const Text("Register"),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  context.read<AuthBloc>().add(const AuthEventLogOut());
+                },
+                child: const Text("Already registered? Login here"),
+              ),
+            ],
+          ),
         ),
       ),
     );

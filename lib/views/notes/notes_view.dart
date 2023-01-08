@@ -65,7 +65,7 @@ class _NotesViewState extends State<NotesView> {
                 ];
               },
               onSelected: (value) async {
-                final logout = context.read<Authbloc>();
+                final logout = context.read<AuthBloc>();
                 switch (value) {
                   case MenuAction.logout:
                     final bool isLogout = await showLogoutDailog(context);
