@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bloc/bloc.dart';
 import 'package:my_notes/services/auth/auth_provider.dart';
 import 'package:my_notes/services/auth/bloc/auth_event.dart';
@@ -78,6 +80,40 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           AuthStateLoggedOut(exception: e, isLoading: false),
         );
       }
+    });
+    // Forgot Password
+    on<AuthEventForgotPassword>((event, emit) async {
+      emit(const AuthStateForgotPassword(
+        exception: null,
+        hasSentEmail: false,
+        isLoading: false,
+      ));
+
+      final email = event.email;
+      if (email == null) {
+        return;
+      }
+      emit(const AuthStateForgotPassword(
+        exception: null,
+        hasSentEmail: false,
+        isLoading: true,
+      ));
+
+      bool didSendEmail;
+      Exception? exception;
+      try {
+        await provider.sendPasswordResetLink(toEmail: email);
+        didSendEmail = true;
+        exception = null;
+      } on Exception catch (e) {
+        didSendEmail = false;
+        exception = e;
+      }
+      emit(AuthStateForgotPassword(
+        exception: exception,
+        hasSentEmail: didSendEmail,
+        isLoading: false,
+      ));
     });
   }
 }

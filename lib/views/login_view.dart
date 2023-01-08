@@ -37,13 +37,17 @@ class _LoginViewState extends State<LoginView> {
       listener: (context, state) async {
         if (state is AuthStateLoggedOut) {
           if (state.exception is MyNotesNullUserAuthExceptions) {
-            await showErrorDailog(context, "User not found");
+            await showErrorDailog(
+                context, "Cannot find user with the entered credentials");
           } else if (state.exception is MyNotesWrongPasswordAuthExceptions) {
             await showErrorDailog(context, "Wrong credentials");
           } else if (state.exception is MyNotesInvalidEmailAuthExceptions) {
             await showErrorDailog(context, "invalid email");
           } else if (state.exception is MyNotesAuthExceptions) {
             await showErrorDailog(context, "Authentication error ");
+          } else if (state.exception is Exception) {
+            await showErrorDailog(
+                context, "Error: ${state.exception.toString()}");
           }
         }
       },
@@ -74,7 +78,7 @@ class _LoginViewState extends State<LoginView> {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: ElevatedButton(
-                  onPressed: () async {
+                  onPressed: () {
                     final email = _email.text;
                     final password = _password.text;
                     context.read<AuthBloc>().add(
@@ -83,6 +87,14 @@ class _LoginViewState extends State<LoginView> {
                   },
                   child: const Text("Login"),
                 ),
+              ),
+              TextButton(
+                onPressed: () {
+                  context.read<AuthBloc>().add(
+                        const AuthEventForgotPassword(),
+                      );
+                },
+                child: const Text("Forgot password?"),
               ),
               TextButton(
                 onPressed: () {

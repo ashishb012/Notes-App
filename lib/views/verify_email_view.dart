@@ -45,6 +45,15 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                 },
                 child: const Text("Restart"),
               ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    context.read<AuthBloc>().add(const AuthEventLogOut());
+                  },
+                  child: const Text("Verified Email go to Login page"),
+                ),
+              ),
             ],
           ),
         ),

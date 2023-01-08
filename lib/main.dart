@@ -7,6 +7,7 @@ import 'package:my_notes/services/auth/bloc/auth_bloc.dart';
 import 'package:my_notes/services/auth/bloc/auth_event.dart';
 import 'package:my_notes/services/auth/bloc/auth_state.dart';
 import 'package:my_notes/services/auth/firebase_auth_provider.dart';
+import 'package:my_notes/views/forgot_password_view.dart';
 import 'package:my_notes/views/login_view.dart';
 import 'package:my_notes/views/notes/create_update_notes_view.dart';
 import 'package:my_notes/views/notes/notes_view.dart';
@@ -61,6 +62,8 @@ class _HomePageState extends State<HomePage> {
           return const LoginView();
         } else if (state is AuthStateRegistering) {
           return const RegisterView();
+        } else if (state is AuthStateForgotPassword) {
+          return const ForgotPasswordView();
         } else {
           return const Scaffold(
             body: Center(

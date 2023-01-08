@@ -41,30 +41,16 @@ class _RegisterViewState extends State<RegisterView> {
       listener: (context, state) async {
         if (state is AuthStateRegistering) {
           if (state.exception is MyNotesWeakPasswordAuthExceptions) {
-            await showErrorDailog(
-              context,
-              "weak password",
-            );
+            await showErrorDailog(context, "weak password");
           } else if (state.exception is MyNotesInvalidEmailAuthExceptions) {
-            await showErrorDailog(
-              context,
-              "invalid email",
-            );
+            await showErrorDailog(context, "invalid email");
           } else if (state.exception is MyNotesEmailInUseAuthExceptions) {
-            await showErrorDailog(
-              context,
-              "email already in use",
-            );
+            await showErrorDailog(context, "email already in use");
           } else if (state.exception is MyNotesAuthExceptions) {
+            await showErrorDailog(context, "Authentication error ");
+          } else if (state.exception is Exception) {
             await showErrorDailog(
-              context,
-              "Authentication error ",
-            );
-          } else {
-            await showErrorDailog(
-              context,
-              "Error: ${state.exception.toString()}",
-            );
+                context, "Error: ${state.exception.toString()}");
           }
         }
       },
@@ -101,20 +87,21 @@ class _RegisterViewState extends State<RegisterView> {
                 autocorrect: false,
               ),
               Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(16.0),
                 child: ElevatedButton(
                   onPressed: () async {
                     final email = _email.text;
                     final password = _password.text;
+                    final authBloc = context.read<AuthBloc>();
                     if (password != _confirmPassword.text) {
                       await showErrorDailog(
                         context,
                         "Password doesn't match",
                       );
                     }
-                    context.read<AuthBloc>().add(
-                          AuthEventRegister(email, password),
-                        );
+                    authBloc.add(
+                      AuthEventRegister(email, password),
+                    );
                   },
                   child: const Text("Register"),
                 ),
