@@ -1,5 +1,3 @@
-import 'dart:developer' show log;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_notes/constants/routs.dart';
@@ -72,8 +70,6 @@ class _NotesViewState extends State<NotesView> {
                     if (isLogout) {
                       logout.add(const AuthEventLogOut());
                     }
-                    log(value.toString());
-                    log(isLogout.toString());
                 }
               },
             ),

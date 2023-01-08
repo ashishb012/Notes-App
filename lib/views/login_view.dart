@@ -5,7 +5,6 @@ import 'package:my_notes/services/auth/bloc/auth_bloc.dart';
 import 'package:my_notes/services/auth/bloc/auth_event.dart';
 import 'package:my_notes/services/auth/bloc/auth_state.dart';
 import 'package:my_notes/utilities/dailogs/error_dailogs.dart';
-import 'package:my_notes/utilities/dailogs/loading_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -17,7 +16,6 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
-  //CloseDialog? _closeDialogHandel;
 
   @override
   void initState() {
@@ -38,43 +36,14 @@ class _LoginViewState extends State<LoginView> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
         if (state is AuthStateLoggedOut) {
-          // final closeDialog = _closeDialogHandel;
-          // if (!state.isLoading && closeDialog != null) {
-          //   closeDialog();
-
-          //   _closeDialogHandel = null;
-          // } else if (state.isLoading && closeDialog == null) {
-          //   _closeDialogHandel = showLoadingDailog(
-          //     context: context,
-          //     text: "Loading...",
-          //   );
-          // }
-
           if (state.exception is MyNotesNullUserAuthExceptions) {
-            await showErrorDailog(
-              context,
-              "User not found",
-            );
+            await showErrorDailog(context, "User not found");
           } else if (state.exception is MyNotesWrongPasswordAuthExceptions) {
-            await showErrorDailog(
-              context,
-              "Wrong credentials",
-            );
+            await showErrorDailog(context, "Wrong credentials");
           } else if (state.exception is MyNotesInvalidEmailAuthExceptions) {
-            await showErrorDailog(
-              context,
-              "invalid email",
-            );
+            await showErrorDailog(context, "invalid email");
           } else if (state.exception is MyNotesAuthExceptions) {
-            await showErrorDailog(
-              context,
-              "Authentication error ",
-            );
-          } else {
-            await showErrorDailog(
-              context,
-              "Error: ${state.exception.toString()}",
-            );
+            await showErrorDailog(context, "Authentication error ");
           }
         }
       },
