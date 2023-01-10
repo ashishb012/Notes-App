@@ -21,10 +21,10 @@ class _CreateUpdateNotesViewState extends State<CreateUpdateNotesView> {
 
   @override
   void initState() {
-    super.initState();
     _notesServices = FirebaseCloudStorage();
     _textEditingController = TextEditingController();
     _titleEditingController = TextEditingController();
+    super.initState();
   }
 
   Future<CloudNote> createOrGetNote(BuildContext context) async {
@@ -108,6 +108,7 @@ class _CreateUpdateNotesViewState extends State<CreateUpdateNotesView> {
           controller: _titleEditingController,
           maxLines: 1,
           keyboardType: TextInputType.text,
+          cursorColor: Colors.black,
           decoration: const InputDecoration(
             hintText: "Title",
             border: InputBorder.none,
@@ -128,7 +129,7 @@ class _CreateUpdateNotesViewState extends State<CreateUpdateNotesView> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(5.0),
+        padding: const EdgeInsets.all(10.0),
         child: FutureBuilder(
           future: createOrGetNote(context),
           builder: (context, snapshot) {
@@ -140,6 +141,7 @@ class _CreateUpdateNotesViewState extends State<CreateUpdateNotesView> {
                   controller: _textEditingController,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
+                  autofocus: true,
                   decoration: const InputDecoration(
                     hintText: "Start Typing here...",
                     border: InputBorder.none,

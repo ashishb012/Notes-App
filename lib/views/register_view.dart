@@ -67,24 +67,25 @@ class _RegisterViewState extends State<RegisterView> {
             children: [
               TextField(
                 controller: _email,
-                decoration: const InputDecoration(hintText: "Enter your email"),
                 keyboardType: TextInputType.emailAddress,
+                autocorrect: false,
+                decoration: const InputDecoration(hintText: "Enter your email"),
               ),
               TextField(
                 controller: _password,
-                decoration:
-                    const InputDecoration(hintText: "Enter your password"),
                 obscureText: true,
                 enableSuggestions: false,
                 autocorrect: false,
+                decoration:
+                    const InputDecoration(hintText: "Enter your password"),
               ),
               TextField(
                 controller: _confirmPassword,
-                decoration:
-                    const InputDecoration(hintText: "Re-enter your password"),
                 obscureText: true,
                 enableSuggestions: false,
                 autocorrect: false,
+                decoration:
+                    const InputDecoration(hintText: "Re-enter your password"),
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),

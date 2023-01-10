@@ -63,9 +63,9 @@ previous step & register your email''',
                 padding: const EdgeInsets.all(10.0),
                 child: TextField(
                   keyboardType: TextInputType.emailAddress,
+                  controller: _controller,
                   autocorrect: false,
                   autofocus: true,
-                  controller: _controller,
                   decoration: const InputDecoration(
                     hintText: "Your email address",
                   ),
