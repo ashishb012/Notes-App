@@ -25,7 +25,7 @@ void main() {
         child: const HomePage(),
       ),
       routes: {
-        createUpdateNotesRoute: (context) => const CreateUpdateNotesView(),
+        createUpdateNotesRoute: (context) => const CreateUpdateCloudNotesView(),
       },
     ),
   );

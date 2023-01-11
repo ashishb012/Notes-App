@@ -6,14 +6,16 @@ import 'package:my_notes/services/firebase_cloud/cloud_note.dart';
 import 'package:my_notes/services/firebase_cloud/firebase_cloud_storage.dart';
 import 'package:share_plus/share_plus.dart';
 
-class CreateUpdateNotesView extends StatefulWidget {
-  const CreateUpdateNotesView({super.key});
+class CreateUpdateCloudNotesView extends StatefulWidget {
+  const CreateUpdateCloudNotesView({super.key});
 
   @override
-  State<CreateUpdateNotesView> createState() => _CreateUpdateNotesViewState();
+  State<CreateUpdateCloudNotesView> createState() =>
+      _CreateUpdateCloudNotesViewState();
 }
 
-class _CreateUpdateNotesViewState extends State<CreateUpdateNotesView> {
+class _CreateUpdateCloudNotesViewState
+    extends State<CreateUpdateCloudNotesView> {
   CloudNote? _note;
   late final FirebaseCloudStorage _notesServices;
   late final TextEditingController _textEditingController;
@@ -27,14 +29,14 @@ class _CreateUpdateNotesViewState extends State<CreateUpdateNotesView> {
     super.initState();
   }
 
-  Future<CloudNote> createOrGetNote(BuildContext context) async {
-    final widgetNote = context.getArguments<CloudNote>();
+  Future<CloudNote> createOrGetCloudNote(BuildContext context) async {
+    final widgetCloudNote = context.getArguments<CloudNote>();
 
-    if (widgetNote != null) {
-      _note = widgetNote;
-      _textEditingController.text = widgetNote.text;
-      _titleEditingController.text = widgetNote.title;
-      return widgetNote;
+    if (widgetCloudNote != null) {
+      _note = widgetCloudNote;
+      _textEditingController.text = widgetCloudNote.text;
+      _titleEditingController.text = widgetCloudNote.title;
+      return widgetCloudNote;
     }
 
     final existingNote = _note;
@@ -131,7 +133,7 @@ class _CreateUpdateNotesViewState extends State<CreateUpdateNotesView> {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: FutureBuilder(
-          future: createOrGetNote(context),
+          future: createOrGetCloudNote(context),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
@@ -158,6 +160,11 @@ class _CreateUpdateNotesViewState extends State<CreateUpdateNotesView> {
 }
 
 // // Crud
+// class CreateUpdateNotesView extends StatefulWidget {
+//   const CreateUpdateNotesView({super.key});
+//   @override
+//   State<CreateUpdateNotesView> createState() => _CreateUpdateNotesViewState();
+// }
 // class _CreateUpdateNotesViewState extends State<CreateUpdateNotesView> {
 //   DatabaseNote? _note;
 //   late final NotesServices _notesServices;
