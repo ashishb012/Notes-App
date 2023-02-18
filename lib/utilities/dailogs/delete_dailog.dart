@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:my_notes/utilities/dailogs/generic_dailogs.dart';
 
 Future<bool> showDeleteDailog(BuildContext context) {

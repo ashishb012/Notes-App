@@ -121,7 +121,7 @@ class _CreateUpdateCloudNotesViewState
             onPressed: () async {
               final text = _textEditingController.text;
               if (_note == null || text.isEmpty) {
-                await showCannotShareEmptyNoteDailog(context);
+                showCannotShareEmptyNoteDailog(context);
               } else {
                 Share.share(text);
               }
