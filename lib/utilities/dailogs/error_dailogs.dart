@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:my_notes/utilities/dailogs/generic_dailogs.dart';
 
-Future<void> showErrorDailog(
+void showErrorDailog(
   BuildContext context,
   String text,
 ) {
-  return showGenericDailog<void>(
-    context: context,
-    title: "An error occurred",
-    content: text,
-    optionBuilder: () => {
-      "Ok": null,
-    },
-  );
+  final snackBar = SnackBar(content: Text(text));
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
+// // Add await everywhere it is used
+// Future<void> showErrorDailog(
+//   BuildContext context,
+//   String text,
+// ) {
+// return showGenericDailog<void>(
+//     context: context,
+//     title: "An error occurred",
+//     content: text,
+//     optionBuilder: () => {
+//       "Ok": null,
+//     },
+//   );
+// }

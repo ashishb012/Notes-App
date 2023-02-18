@@ -37,17 +37,16 @@ class _LoginViewState extends State<LoginView> {
       listener: (context, state) async {
         if (state is AuthStateLoggedOut) {
           if (state.exception is MyNotesNullUserAuthExceptions) {
-            await showErrorDailog(
+            showErrorDailog(
                 context, "Cannot find user with the entered credentials");
           } else if (state.exception is MyNotesWrongPasswordAuthExceptions) {
-            await showErrorDailog(context, "Wrong credentials");
+            showErrorDailog(context, "Wrong credentials");
           } else if (state.exception is MyNotesInvalidEmailAuthExceptions) {
-            await showErrorDailog(context, "invalid email");
+            showErrorDailog(context, "invalid email");
           } else if (state.exception is MyNotesAuthExceptions) {
-            await showErrorDailog(context, "Authentication error ");
+            showErrorDailog(context, "Authentication error ");
           } else if (state.exception is Exception) {
-            await showErrorDailog(
-                context, "Error: ${state.exception.toString()}");
+            showErrorDailog(context, "Error: ${state.exception.toString()}");
           }
         }
       },

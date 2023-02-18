@@ -38,7 +38,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
             showPasswordResetEmailSentDailog(context);
           }
           if (state.exception != null) {
-            await showErrorDailog(
+            showErrorDailog(
               context,
               '''We could not process your request. 
 Please make sure your email is registred or go to 

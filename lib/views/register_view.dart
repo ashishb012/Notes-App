@@ -41,16 +41,15 @@ class _RegisterViewState extends State<RegisterView> {
       listener: (context, state) async {
         if (state is AuthStateRegistering) {
           if (state.exception is MyNotesWeakPasswordAuthExceptions) {
-            await showErrorDailog(context, "weak password");
+            showErrorDailog(context, "weak password");
           } else if (state.exception is MyNotesInvalidEmailAuthExceptions) {
-            await showErrorDailog(context, "invalid email");
+            showErrorDailog(context, "invalid email");
           } else if (state.exception is MyNotesEmailInUseAuthExceptions) {
-            await showErrorDailog(context, "email already in use");
+            showErrorDailog(context, "email already in use");
           } else if (state.exception is MyNotesAuthExceptions) {
-            await showErrorDailog(context, "Authentication error ");
+            showErrorDailog(context, "Authentication error ");
           } else if (state.exception is Exception) {
-            await showErrorDailog(
-                context, "Error: ${state.exception.toString()}");
+            showErrorDailog(context, "Error: ${state.exception.toString()}");
           }
         }
       },
@@ -95,7 +94,7 @@ class _RegisterViewState extends State<RegisterView> {
                     final password = _password.text;
                     final authBloc = context.read<AuthBloc>();
                     if (password != _confirmPassword.text) {
-                      await showErrorDailog(
+                      showErrorDailog(
                         context,
                         "Password doesn't match",
                       );

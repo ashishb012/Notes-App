@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 void showCannotShareEmptyNoteDailog(BuildContext context) {
-  const snackbar = SnackBar(
+  const snackBar = SnackBar(
     content: Text("You cannot share an empty note!"),
   );
-  ScaffoldMessenger.of(context).showSnackBar(snackbar);
-  return;
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
-  // showGenericDailog<void>(
+  // // Add await everywhere it is used
+  // Future<void> showCannotShareEmptyNoteDailog(BuildContext context) {
+  // return showGenericDailog<void>(
   //   context: context,
   //   title: "Sharing",
   //   content: "You cannot share an empty note!",
@@ -15,4 +16,4 @@ void showCannotShareEmptyNoteDailog(BuildContext context) {
   //     "Ok": null,
   //   },
   // );
-
+  // }
