@@ -58,53 +58,56 @@ class _LoginViewState extends State<LoginView> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextField(
-                controller: _email,
-                keyboardType: TextInputType.emailAddress,
-                autocorrect: false,
-                decoration: const InputDecoration(hintText: "Enter your email"),
-              ),
-              TextField(
-                controller: _password,
-                decoration:
-                    const InputDecoration(hintText: "Enter your password"),
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: ElevatedButton(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextField(
+                  controller: _email,
+                  keyboardType: TextInputType.emailAddress,
+                  autocorrect: false,
+                  decoration:
+                      const InputDecoration(hintText: "Enter your email"),
+                ),
+                TextField(
+                  controller: _password,
+                  decoration:
+                      const InputDecoration(hintText: "Enter your password"),
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      final email = _email.text;
+                      final password = _password.text;
+                      context.read<AuthBloc>().add(
+                            AuthEventLogIn(email, password),
+                          );
+                    },
+                    child: const Text("Login"),
+                  ),
+                ),
+                TextButton(
                   onPressed: () {
-                    final email = _email.text;
-                    final password = _password.text;
                     context.read<AuthBloc>().add(
-                          AuthEventLogIn(email, password),
+                          const AuthEventForgotPassword(),
                         );
                   },
-                  child: const Text("Login"),
+                  child: const Text("Forgot password?"),
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  context.read<AuthBloc>().add(
-                        const AuthEventForgotPassword(),
-                      );
-                },
-                child: const Text("Forgot password?"),
-              ),
-              TextButton(
-                onPressed: () {
-                  context.read<AuthBloc>().add(
-                        const AuthEventShouldRigister(),
-                      );
-                },
-                child: const Text("Not registered? Register here"),
-              ),
-            ],
+                TextButton(
+                  onPressed: () {
+                    context.read<AuthBloc>().add(
+                          const AuthEventShouldRigister(),
+                        );
+                  },
+                  child: const Text("Not registered? Register here"),
+                ),
+              ],
+            ),
           ),
         ),
       ),

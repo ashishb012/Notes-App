@@ -53,49 +53,54 @@ previous step & register your email''',
         ),
         body: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text("If you don't remember your password"),
-              const Text("Enter your email & we'll send a password reset link"),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: TextField(
-                  keyboardType: TextInputType.emailAddress,
-                  controller: _controller,
-                  autocorrect: false,
-                  autofocus: true,
-                  decoration: const InputDecoration(
-                    hintText: "Your email address",
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text("If you don't remember your password"),
+                const Text(
+                    "Enter your email & we'll send a password reset link"),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextField(
+                    keyboardType: TextInputType.emailAddress,
+                    controller: _controller,
+                    autocorrect: false,
+                    autofocus: true,
+                    decoration: const InputDecoration(
+                      hintText: "Your email address",
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Center(
-                  child: Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          final email = _controller.text;
-                          context
-                              .read<AuthBloc>()
-                              .add(AuthEventForgotPassword(email: email));
-                        },
-                        child: const Text("Send link"),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          context.read<AuthBloc>().add(const AuthEventLogOut());
-                        },
-                        child: const Text("Back to Login page"),
-                      ),
-                    ],
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            final email = _controller.text;
+                            context
+                                .read<AuthBloc>()
+                                .add(AuthEventForgotPassword(email: email));
+                          },
+                          child: const Text("Send link"),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            context
+                                .read<AuthBloc>()
+                                .add(const AuthEventLogOut());
+                          },
+                          child: const Text("Back to Login page"),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

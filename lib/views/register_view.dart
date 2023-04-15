@@ -61,58 +61,61 @@ class _RegisterViewState extends State<RegisterView> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextField(
-                controller: _email,
-                keyboardType: TextInputType.emailAddress,
-                autocorrect: false,
-                decoration: const InputDecoration(hintText: "Enter your email"),
-              ),
-              TextField(
-                controller: _password,
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                decoration:
-                    const InputDecoration(hintText: "Enter your password"),
-              ),
-              TextField(
-                controller: _confirmPassword,
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                decoration:
-                    const InputDecoration(hintText: "Re-enter your password"),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    final email = _email.text;
-                    final password = _password.text;
-                    final authBloc = context.read<AuthBloc>();
-                    if (password != _confirmPassword.text) {
-                      showErrorDailog(
-                        context,
-                        "Password doesn't match",
-                      );
-                    }
-                    authBloc.add(
-                      AuthEventRegister(email, password),
-                    );
-                  },
-                  child: const Text("Register"),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextField(
+                  controller: _email,
+                  keyboardType: TextInputType.emailAddress,
+                  autocorrect: false,
+                  decoration:
+                      const InputDecoration(hintText: "Enter your email"),
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  context.read<AuthBloc>().add(const AuthEventLogOut());
-                },
-                child: const Text("Already registered? Login here"),
-              ),
-            ],
+                TextField(
+                  controller: _password,
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  decoration:
+                      const InputDecoration(hintText: "Enter your password"),
+                ),
+                TextField(
+                  controller: _confirmPassword,
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  decoration:
+                      const InputDecoration(hintText: "Re-enter your password"),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      final email = _email.text;
+                      final password = _password.text;
+                      final authBloc = context.read<AuthBloc>();
+                      if (password != _confirmPassword.text) {
+                        showErrorDailog(
+                          context,
+                          "Password doesn't match",
+                        );
+                      }
+                      authBloc.add(
+                        AuthEventRegister(email, password),
+                      );
+                    },
+                    child: const Text("Register"),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    context.read<AuthBloc>().add(const AuthEventLogOut());
+                  },
+                  child: const Text("Already registered? Login here"),
+                ),
+              ],
+            ),
           ),
         ),
       ),

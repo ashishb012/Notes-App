@@ -22,39 +22,41 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                  "Check your inbox and verify your email by clicking the link"),
-              const Text("\nAlso check spam folder"),
-              const Text("\nIf you didn't recive the email"),
-              TextButton(
-                onPressed: () {
-//add exception for "too-many-requests"
-                  context
-                      .read<AuthBloc>()
-                      .add(const AuthEventSendVerificationEmail());
-                },
-                child: const Text("Resend email verification link"),
-              ),
-              const Text("\n\nEntered wrong email"),
-              TextButton(
-                onPressed: () {
-                  context.read<AuthBloc>().add(const AuthEventLogOut());
-                },
-                child: const Text("Restart"),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ElevatedButton(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                    "Check your inbox and verify your email by clicking the link"),
+                const Text("\nAlso check spam folder"),
+                const Text("\nIf you didn't recive the email"),
+                TextButton(
+                  onPressed: () {
+                    //add exception for "too-many-requests"
+                    context
+                        .read<AuthBloc>()
+                        .add(const AuthEventSendVerificationEmail());
+                  },
+                  child: const Text("Resend email verification link"),
+                ),
+                const Text("\n\nEntered wrong email"),
+                TextButton(
                   onPressed: () {
                     context.read<AuthBloc>().add(const AuthEventLogOut());
                   },
-                  child: const Text("Verified Email go to Login page"),
+                  child: const Text("Restart"),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.read<AuthBloc>().add(const AuthEventLogOut());
+                    },
+                    child: const Text("Verified Email go to Login page"),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
