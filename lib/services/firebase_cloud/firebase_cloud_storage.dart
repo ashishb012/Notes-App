@@ -40,7 +40,7 @@ class FirebaseCloudStorage {
     try {
       return await notes
           .where(
-            ownerUserId,
+            ownerUserIdFieldName,
             isEqualTo: ownerUserId,
           )
           .get()
