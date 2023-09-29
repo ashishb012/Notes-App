@@ -61,6 +61,7 @@ class _LoginViewState extends State<LoginView> {
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 TextField(
                   controller: _email,

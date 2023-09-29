@@ -50,6 +50,7 @@ previous step & register your email''',
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Forgot Password"),
+          centerTitle: true,
         ),
         body: Padding(
           padding: const EdgeInsets.all(10.0),

@@ -20,10 +20,12 @@ void main() {
     MaterialApp(
       title: "My Notes",
       theme: ThemeData(primarySwatch: Colors.blue),
+      darkTheme: ThemeData(),
       home: BlocProvider<AuthBloc>(
         create: (context) => AuthBloc(FirebaseAuthProvider()),
         child: const HomePage(),
       ),
+      debugShowCheckedModeBanner: false,
       routes: {
         createUpdateNotesRoute: (context) => const CreateUpdateCloudNotesView(),
       },

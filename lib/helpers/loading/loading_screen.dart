@@ -89,7 +89,7 @@ class LoadingScreen {
       },
     );
 
-    state?.insert(overLay);
+    state.insert(overLay);
     return LoadindScreenController(
       close: () {
         streamText.close();
